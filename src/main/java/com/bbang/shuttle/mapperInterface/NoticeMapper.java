@@ -1,4 +1,4 @@
-package com.bbang.shuttle.service;
+package com.bbang.shuttle.mapperInterface;
 
 import com.bbang.shuttle.criTest.Criteria;
 import com.bbang.shuttle.criTest.SearchCriteria;
@@ -6,7 +6,7 @@ import com.bbang.shuttle.vo.NoticeVO;
 
 import java.util.List;
 
-public interface NoticeService {
+public interface NoticeMapper {
 
   // ** SearchCriteria PageList
   List<NoticeVO> searchList(SearchCriteria cri);
@@ -33,6 +33,5 @@ public interface NoticeService {
 
   // ** 조회수 증가
   int countUp(NoticeVO vo);
-
 
 }
