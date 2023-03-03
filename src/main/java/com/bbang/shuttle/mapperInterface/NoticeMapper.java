@@ -3,9 +3,13 @@ package com.bbang.shuttle.mapperInterface;
 import com.bbang.shuttle.criTest.Criteria;
 import com.bbang.shuttle.criTest.SearchCriteria;
 import com.bbang.shuttle.vo.NoticeVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Mapper
+@Repository
 public interface NoticeMapper {
 
   // ** SearchCriteria PageList

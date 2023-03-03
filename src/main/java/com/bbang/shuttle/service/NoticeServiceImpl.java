@@ -5,20 +5,26 @@ import com.bbang.shuttle.criTest.SearchCriteria;
 import com.bbang.shuttle.mapperInterface.NoticeMapper;
 import com.bbang.shuttle.vo.NoticeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Primary
 @Service
 public class NoticeServiceImpl implements NoticeService {
-  @Autowired
   //=> 아래 생성문의 "=" 의 역할 (반드시 생성해야함)
   //BoardDAO dao;
-  //BoardDAO dao = new BoardDAO(); // -> @Repository
+  //BoardDAO dao = new BoardDAO(); // -> @Repository ,ㅡ.,service
 
   // => BoardMapper interface 로 교체,
   //    이 Mapper 를 통해서 BoardMapper.xml 의 SQL 구문 접근
-  NoticeMapper mapper;
+  private final NoticeMapper mapper;
+
+  @Autowired
+  public NoticeServiceImpl(NoticeMapper mapper) {
+    this.mapper = mapper;
+  }
 
   // ** SearchCriteria PageList
   @Override

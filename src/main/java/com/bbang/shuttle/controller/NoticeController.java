@@ -2,9 +2,13 @@ package com.bbang.shuttle.controller;
 
 import com.bbang.shuttle.criTest.PageMaker;
 import com.bbang.shuttle.criTest.SearchCriteria;
+import com.bbang.shuttle.mapperInterface.NoticeMapper;
 import com.bbang.shuttle.service.NoticeService;
 import com.bbang.shuttle.service.NoticeServiceImpl;
+import com.bbang.shuttle.vo.NoticeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,10 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 // 2. 페이징 기능
 // 3. 검색 기능
 
+
+@Controller
 public class NoticeController {
 
   @Autowired
   NoticeService service;
+
 
   // ** Criteria PageList
   // => ver01 : Criteria cri
@@ -55,7 +62,7 @@ public class NoticeController {
 
   // ** BoardDetail: /bdetail
   @RequestMapping(value = "/bdetail", method=RequestMethod.GET)
-  public ModelAndView bdetail(HttpServletRequest request, ModelAndView mv, BoardVO vo) {
+  public ModelAndView bdetail(HttpServletRequest request, ModelAndView mv, NoticeVO vo) {
     // ** Detail & 조회수 증가 , Update Form 출력
 
     // => 조회수 증가 : 테이블의 cnt=cnt+1
@@ -68,9 +75,7 @@ public class NoticeController {
       // ** 조회수 증가
       // => 로그인 id 확인
       String loginID = (String)request.getSession().getAttribute("loginID");
-      if ( !vo.getId().equals(loginID) &&
-          !"admin".equals(loginID) &&
-          !"U".equals(request.getParameter("jCode")) ) {
+      if ( !"admin".equals(loginID) && !"U".equals(request.getParameter("jCode")) ) {
         // => 조회수 증가
         if ( service.countUp(vo)>0 ) vo.setCnt(vo.getCnt()+1);
       } //if_증가조건
@@ -97,7 +102,7 @@ public class NoticeController {
   } //binsertForm
 
   @RequestMapping(value="/binsert", method=RequestMethod.POST )
-  public ModelAndView binsert(ModelAndView mv, BoardVO vo, RedirectAttributes rttr) {
+  public ModelAndView binsert(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
     // ** Service
     // => 성공 : redirect blist
     // => 실패 : binsertForm (재입력 유도)
@@ -116,11 +121,11 @@ public class NoticeController {
 
   // ** Update: /bupdate
   @RequestMapping(value="/bupdate", method=RequestMethod.POST )
-  public ModelAndView bupdate(ModelAndView mv, BoardVO vo, RedirectAttributes rttr) {
+  public ModelAndView bupdate(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
     // ** Service
     // => 성공 : redirect : bdetail , seq 필요
     // => 실패 : bupdateForm (재수정 유도)
-    String uri="redirect:bdetail?seq="+vo.getSeq();
+    String uri="redirect:bdetail?seq="+vo.getNoticeNo();
 
     if ( service.update(vo)>0 ) {
       // => 성공: message 처리
@@ -137,7 +142,7 @@ public class NoticeController {
 
   // ** Delete: bdelete
   @RequestMapping(value="/bdelete", method=RequestMethod.GET )
-  public ModelAndView bdelete(ModelAndView mv, BoardVO vo, RedirectAttributes rttr) {
+  public ModelAndView bdelete(ModelAndView mv, NoticeVO vo, RedirectAttributes rttr) {
     // ** Service
     // => 성공 : redirect blist
     // => 실패 : redirect bdetail (seq가 필요)
@@ -148,7 +153,7 @@ public class NoticeController {
     }else {
       // => 실패: message, redirect bdetail (seq가 필요)
       rttr.addFlashAttribute("message", "~~ 글 삭제 실패 ~~");
-      uri="redirect:bdetail?seq="+vo.getSeq();
+      uri="redirect:bdetail?seq="+vo.getNoticeNo();
     }
     mv.setViewName(uri);
     return mv;

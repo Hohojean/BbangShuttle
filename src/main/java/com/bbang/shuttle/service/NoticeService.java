@@ -3,6 +3,7 @@ package com.bbang.shuttle.service;
 import com.bbang.shuttle.criTest.Criteria;
 import com.bbang.shuttle.criTest.SearchCriteria;
 import com.bbang.shuttle.vo.NoticeVO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
